@@ -3,16 +3,19 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 class Book {
+    //Private so that Other classes cannot directly access or modify it.
     private String title;
     private String author;
     private boolean available;
-
-    public Book(String title, String author) {
+    private int stockCount;
+    public Book(String title, String author, int stockCount) {
         this.title = title;
         this.author = author;
         this.available = true;
+        this.stockCount = stockCount;
+        //true indicates that the book is available for checkout by default.
     }
-
+    //can use private also but other class will not be able to access them
     public String getTitle() {
         return title;
     }
@@ -20,21 +23,26 @@ class Book {
     public String getAuthor() {
         return author;
     }
+    public int getstockCount(){
+        return stockCount;
+    }
+    public void checkout(){
+        if (stockCount>0){
+            stockCount--;
+        }
+    }
 
     public boolean isAvailable() {
         return available;
     }
 
-    public void checkout() {
-        available = false;
-    }
-
     public void returnBook() {
         available = true;
+        stockCount++;
     }
-
+    // to-string is used to creates a string representation of the Book object.
     public String toString() {
-        return "Title: " + title + ", Author: " + author + ", Available: " + (available ? "Yes" : "No");
+        return "Title: " + title + ", Author: " + author + ", Available: " + (available ? "Yes" : "No")+ ", stockCount:" + stockCount;
     }
 }
 
@@ -47,8 +55,8 @@ class Library {
         bookMap = new HashMap<>();
     }
 
-    public void addBook(String title, String author) {
-        Book newBook = new Book(title, author);
+    public void addBook(String title, String author, int stockCount) {
+        Book newBook = new Book(title, author, stockCount);
         books.add(newBook);
         bookMap.put(title.toLowerCase(), newBook);
     }
@@ -66,7 +74,16 @@ class Library {
             System.out.println("Book not found.");
         }
     }
-
+    public void removeBook(String title) {
+        Book book = bookMap.get(title.toLowerCase());
+        if (book != null) {
+            books.remove(book);
+            bookMap.remove(title.toLowerCase());
+            System.out.println("Book removed: " + title);
+        } else {
+            System.out.println("Book not found.");
+        }
+    }
     public void checkoutBook(String title) {
         Book book = bookMap.get(title.toLowerCase());
         if (book != null && book.isAvailable()) {
@@ -91,21 +108,23 @@ class Library {
 public class Main {
     public static void main(String[] args) {
         Library library = new Library();
+        library.addBook("Mein Kemf", "Adolf Hitler",15);
+        library.addBook("Utopia", " Sir Thomas Moor",50);
+        library.addBook("Origin of Species", "Charles Darwin",10);
+        library.addBook("Harry Potter and the Sorcerer's Stone", "J.K. Rowling",6);
 
-        library.addBook("Book 1", "Author 1");
-        library.addBook("Book 2", "Author 2");
-        library.addBook("Book 3", "Author 3");
 
         Scanner scanner = new Scanner(System.in);
         int choice;
 
         do {
             System.out.println("\nMenu:");
-            System.out.println("1. Display all books");
-            System.out.println("2. Search for a book");
-            System.out.println("3. Checkout a book");
-            System.out.println("4. Return a book");
-            System.out.println("5. Exit");
+            System.out.println("1. To Display all books");
+            System.out.println("2. To Search for a book");
+            System.out.println("3. To add some book");
+            System.out.println("4. Checkout a book");
+            System.out.println("5. Return a book");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
@@ -121,18 +140,30 @@ public class Main {
                     library.searchBooks(query);
                     break;
                 case 3:
+                    System.out.print("Enter title of the book: ");
+                    String addTitle = scanner.nextLine();
+                    System.out.print("Enter author of the book: ");
+                    String addAuthor = scanner.nextLine();
+                    System.out.print("Enter stock count: ");
+                    int addStockCount = scanner.nextInt();
+                    library.addBook(addTitle, addAuthor, addStockCount);
+                    System.out.println("Book added successfully.");
+                    break;
+                case 4:
                     System.out.print("Enter title of the book to checkout: ");
                     String checkoutTitle = scanner.nextLine();
                     library.checkoutBook(checkoutTitle);
                     break;
-                case 4:
+                case 5:
                     System.out.print("Enter title of the book to return: ");
                     String returnTitle = scanner.nextLine();
                     library.returnBook(returnTitle);
                     break;
-                case 5:
+                case 6:
                     System.out.println("Exiting...");
                     break;
+
+
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
