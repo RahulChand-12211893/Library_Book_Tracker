@@ -139,16 +139,17 @@ public class Main {
                     String query = scanner.nextLine();
                     library.searchBooks(query);
                     break;
-                case 3:
+                    case 3:
                     System.out.print("Enter title of the book: ");
                     String addTitle = scanner.nextLine();
                     System.out.print("Enter author of the book: ");
                     String addAuthor = scanner.nextLine();
                     System.out.print("Enter stock count: ");
-                    int addStockCount = scanner.nextInt();
+                    int addStockCount = Integer.parseInt(scanner.nextLine());
                     library.addBook(addTitle, addAuthor, addStockCount);
                     System.out.println("Book added successfully.");
                     break;
+
                 case 4:
                     System.out.print("Enter title of the book to checkout: ");
                     String checkoutTitle = scanner.nextLine();
@@ -160,7 +161,7 @@ public class Main {
                     library.returnBook(returnTitle);
                     break;
                 case 6:
-                    System.out.println("Exiting...");
+                    System.out.println("Thankyou, now u can leave..");
                     break;
 
 
