@@ -96,7 +96,7 @@ class Library {
 
     public void returnBook(String title) {
         Book book = bookMap.get(title.toLowerCase());
-        if (book != null && !book.isAvailable()) {
+        if (book != null && !book.isAvailable() && book.getstockCount() > 0) {
             book.returnBook();
             System.out.println("You have returned the book: " + book.getTitle());
         } else {
@@ -127,8 +127,8 @@ public class Main {
             System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
 
-            choice = scanner.nextInt();
-            scanner.nextLine();  // Consume the newline character
+            choice = Integer.parseInt(scanner.nextLine());
+
 
             switch (choice) {
                 case 1:
@@ -167,7 +167,7 @@ public class Main {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 5);
+        } while (choice != 6);
 
         scanner.close();
     }
